@@ -1,0 +1,11 @@
+.student-item {
+  margin-bottom: 10px;
+}
+
+.student-item span {
+  padding-right: 10px;
+}
+
+ul {
+  list-style: none;
+}
