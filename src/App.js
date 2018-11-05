@@ -13,12 +13,7 @@ class App extends Component {
       show: false
     }
 
-    this.student = {
-      firstName: '',
-      lastName: '',
-      index: '',
-      module: '',
-    }
+    this.student = {}
 
     this.uid = null;
 
@@ -41,12 +36,10 @@ class App extends Component {
     const uid = this.uid;
     let list = [];
 
-    // fix this shit
-    // uids are messed up
     for (let i = 0; i < this.state.students.length; i++) {
-      if(this.state.students[i].uid === uid) {
-        list[i] = student;
-      } else
+      if(this.state.students[i].uid === uid)
+        list[i] = {...this.state.students[i], ...student};
+      else
         list[i] = this.state.students[i];
     }
     
@@ -54,6 +47,8 @@ class App extends Component {
       students: list,
       show: false
     });
+
+    this.student = {};
   }
   
   render() {
