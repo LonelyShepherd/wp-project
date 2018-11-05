@@ -5,15 +5,14 @@ function StudentsList(props) {
   const listItems = props.students.map(student =>
     <StudentItem 
       id={student.uid} 
-      key={student.uid} 
-      firstName={student.firstName} 
-      lastName={student.lastName} 
-      updateUid={props.onItemClick} 
+      key={student.uid}
+      student={student} 
+      updateUid={props.onItemClick}
     />
   );
 
   return (
-    <ul>{listItems}</ul>
+    <ul className='student-list'>{listItems}</ul>
   );
 }
 

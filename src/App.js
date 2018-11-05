@@ -10,12 +10,11 @@ class App extends Component {
 
     this.state = {
       students: listStudents(),
-      show: false
+      show: false,
+      udi: null
     }
 
-    this.student = {}
-
-    this.uid = null;
+    this.toUpdate = {}
 
     this.updateUid = this.updateUid.bind(this);
     this.updateStudent = this.updateStudent.bind(this);
@@ -23,41 +22,55 @@ class App extends Component {
   }
 
   updateUid(e) {
-    this.uid = parseInt(e.target.id);
-    this.setState({show: true});
+    this.setState({
+      uid: parseInt(e.target.id),
+      show: true
+    });
   }
 
   updateStudent(e) {
-    this.student[e.target.name] = e.target.value;
+    const name = e.target.name;
+
+    this.toUpdate[name] = e.target.value;
+
+    // in case one of the field values were updated but later updated again, only to be empty string
+    // in that case the corresponding property will be empty string and when merged with appropriate 
+    // student from the list, the property will be set to empty string, which is to be avoided
+    // maybe there is more elegant solution to this! 
+    this.toUpdate[name].trim() === '' && delete this.toUpdate[name];
   }
 
   updateStudents() {
-    const student = this.student;
-    const uid = this.uid;
-    let list = [];
+    const students = this.state.students;
+    const toUpdate = this.toUpdate;
+    const uid = this.state.uid;
 
-    for (let i = 0; i < this.state.students.length; i++) {
-      if(this.state.students[i].uid === uid)
-        list[i] = {...this.state.students[i], ...student};
-      else
-        list[i] = this.state.students[i];
-    }
-    
     this.setState({
-      students: list,
+      students: students.map(student => student.uid === uid ? {...student, ...toUpdate} : student),
       show: false
     });
 
-    this.student = {};
+    this.toUpdate = {};
   }
   
   render() {
-    let el = this.state.show && <EditStudentDetails onValueChange={this.updateStudent} onUpdateStudent={this.updateStudents} />
+    const show = this.state.show;
+    const current = this.state.students.filter(student => student.uid === this.state.uid);
+
+    const element = show 
+      && <EditStudentDetails 
+            onValueChange={this.updateStudent} 
+            onUpdateStudent={this.updateStudents}
+            current={current[0]}
+          />
     
     return (
       <div>
-        <StudentList students={this.state.students} onItemClick={this.updateUid} />
-        {el}
+        <StudentList
+          students={this.state.students} 
+          onItemClick={this.updateUid} 
+        />
+        {element}
       </div>
     );
   }

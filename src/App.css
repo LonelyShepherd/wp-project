@@ -1,3 +1,16 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  padding: 10px 20px;
+}
+
+.student-list {
+  margin-bottom: 20px;
+}
+
 .student-item {
   margin-bottom: 10px;
 }
