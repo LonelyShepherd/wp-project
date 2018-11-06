@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       students: listStudents(),
       show: false,
-      udi: null
+      uid: null
     }
 
     this.toUpdate = {}
