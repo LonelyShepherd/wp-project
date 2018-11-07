@@ -13,12 +13,12 @@ class UpdateInput extends Component {
     this.changeHandler = this.changeHandler.bind(this);
   }
 
-  changeHandler(e) {
+  changeHandler = e => {
     this.setState({value: e.target.value});
     this.props.onValueChange(e);
   }
 
-  render() {
+  render = () => {
     return (
       <input 
         type='text'

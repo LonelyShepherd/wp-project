@@ -8,7 +8,7 @@ body {
 }
 
 .student-list {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .student-item {
@@ -21,4 +21,17 @@ body {
 
 ul {
   list-style: none;
+}
+
+.pagination li {
+  display: inline;
+  padding: 0 10px 0 0;
+}
+
+.pagination a {
+  cursor: pointer;
+}
+
+.pagination .active {
+  font-weight: bold;
 }
