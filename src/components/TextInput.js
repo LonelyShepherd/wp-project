@@ -9,8 +9,6 @@ class TextInput extends Component {
     this.state = {
       value: ''
     }
-
-    this.changeHandler = this.changeHandler.bind(this);
   }
 
   changeHandler = e => {

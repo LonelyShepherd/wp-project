@@ -19,11 +19,6 @@ class App extends Component {
       show: false,
       uid: null
     }
-
-    this.updateUid = this.updateUid.bind(this);
-    this.addStudent = this.addStudent.bind(this);
-    this.editStudent = this.editStudent.bind(this);
-    this.deleteStudent = this.deleteStudent.bind(this);
   }
 
   updateUid = e => {
