@@ -12,7 +12,7 @@ class StudentsList extends Component {
     }
   }
 
-  pageClickHandler = data => {
+  pageChangeHandler = data => {
     this.setState({pageNum: data.selected});
   }
 
@@ -24,7 +24,7 @@ class StudentsList extends Component {
           key={student.uid}
           student={student} 
           onDelete={this.props.onDelete}
-          updateUid={this.props.onItemClick}
+          onItemClick={this.props.onItemClick}
         />
       )
       .filter((student, index) => index >= offset && index < nextPageOffset);
@@ -47,7 +47,7 @@ class StudentsList extends Component {
           pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={4}
-          onPageChange={this.pageClickHandler}
+          onPageChange={this.pageChangeHandler}
           containerClassName='pagination'
           activeClassName='active'
         />

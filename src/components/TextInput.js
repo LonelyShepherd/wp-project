@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 // controlled component - better to be separated then to store separate values for
 // each input in App's state; it's easier to manage
-class UpdateInput extends Component {
+class TextInput extends Component {
   constructor(props) {
     super(props);
 
@@ -15,7 +15,7 @@ class UpdateInput extends Component {
 
   changeHandler = e => {
     this.setState({value: e.target.value});
-    this.props.onValueChange(e);
+    this.props.onChange(e);
   }
 
   render = () => {
@@ -30,4 +30,4 @@ class UpdateInput extends Component {
   }
 }
 
-export default UpdateInput;
+export default TextInput;
