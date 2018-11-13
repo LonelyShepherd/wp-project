@@ -18,16 +18,12 @@ class App extends Component {
 
     this.state = {
       students: listStudents(),
-      show: false,
       uid: null
     }
   }
 
-  updateUid = e => {
-    this.setState({
-      uid: parseInt(e.target.id),
-      show: true
-    });
+  updateUid = uid => {
+    this.setState({uid});
   }
 
   addStudent = o => {
@@ -41,8 +37,7 @@ class App extends Component {
     };
 
     this.setState({
-      students: [...students, {...obj, ...o}],
-      show: false
+      students: [...students, {...obj, ...o}]
     });
   }
 
@@ -51,8 +46,7 @@ class App extends Component {
     const students = this.state.students;
         
     this.setState({
-      students: students.map(student => student.uid === uid ? {...student, ...o} : student),
-      show: false
+      students: students.map(student => student.uid === uid ? {...student, ...o} : student)
     });
 
     o = {};
@@ -60,12 +54,9 @@ class App extends Component {
 
   deleteStudent = uid => {
     let students = this.state.students;
-    students.splice(students.indexOf(students.filter(student => student.uid === parseInt(uid))[0]), 1);
+    students.splice(students.indexOf(students.filter(student => student.uid === uid)[0]), 1);
 
-    this.setState({
-      students: students,
-      show: false
-    });
+    this.setState({students});
   }
   
   render = () => {
@@ -82,7 +73,6 @@ class App extends Component {
           </div>
           <Route exact path='/' render={() => 
             <Home 
-              show={this.state.show}
               student={student}
               students={this.state.students} 
               onSubmit={this.editStudent}
