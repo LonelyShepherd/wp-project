@@ -6,9 +6,6 @@ class StudenForm extends Component {
     super(props);
 
     this.student = {};
-
-    this.saveChanges = this.saveChanges.bind(this);
-    this.submitHandler = this.submitHandler.bind(this);
   }
 
   saveChanges = e => {
@@ -31,7 +28,7 @@ class StudenForm extends Component {
 
   render = () => {
     return (
-      <>
+      <div>
         {this.props.children}
         <form onSubmit={this.submitHandler}>
           <TextInput value='' name='firstName' onChange={this.saveChanges} />
@@ -40,7 +37,7 @@ class StudenForm extends Component {
           <TextInput value='' name='module' onChange={this.saveChanges} />
           <input type="submit" value={this.props.text} />
         </form>
-      </>
+      </div>
     );
   }
 }

@@ -37,8 +37,10 @@ class StudentsList extends Component {
     const pageItems = this.getPage(offset, nextPageOffset);
 
     return (
-      <ul className='student-list'>
-        {pageItems}
+      <>
+        <ul className='student-list'>
+          {pageItems}
+        </ul>
         <ReactPaginate 
           previousLabel='Previous'
           nextLabel='Next'
@@ -51,7 +53,7 @@ class StudentsList extends Component {
           containerClassName='pagination'
           activeClassName='active'
         />
-      </ul>
+      </>
     );
   }
 }

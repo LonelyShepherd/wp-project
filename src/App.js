@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { listStudents } from './repository/studentRepository';
+// note for future self: in practice it would be much better if the 
+// separate page components (pages) are imported lazily i.e. only when needed    
+import Add from './pages/Add';
+import Home from './pages/Home';
 import './App.css';
-import AddStudent from './components/AddStudent';
-import EditStudent from './components/EditStudent';
-import StudentList from './components/StudentsList';
 
-// silly way to have a global id but it is a lab project after all
+// silly way to have a global id but it's a lab project after all
 // in reality you would want to use various libraries that provides
 // global unique id creation
 let id = 5;
@@ -68,23 +70,29 @@ class App extends Component {
   
   render = () => {
     const student = this.state.students.filter(student => student.uid === this.state.uid)[0];
-
-    const element = this.state.show 
-      && <EditStudent
-            student={student} 
-            onSubmit={this.editStudent}
-          />
     
     return (
-      <div>
-        <AddStudent onSubmit={this.addStudent} />
-        <StudentList
-          students={this.state.students} 
-          onDelete={this.deleteStudent} 
-          onItemClick={this.updateUid}
-        />
-        {element}
-      </div>
+      <Router>
+        <>
+          <div className="nav">
+            <ul>
+              <li><Link to='/'>Home</Link></li>
+              <li><Link to='/add'>Add Student</Link></li>
+            </ul>
+          </div>
+          <Route exact path='/' render={() => 
+            <Home 
+              show={this.state.show}
+              student={student}
+              students={this.state.students} 
+              onSubmit={this.editStudent}
+              onDelete={this.deleteStudent} 
+              onItemClick={this.updateUid} 
+            />} 
+          />
+          <Route path='/add' render={() => <Add onSubmit={this.addStudent} />} />
+        </>
+      </Router>
     );
   }
 }

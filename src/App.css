@@ -7,6 +7,11 @@ body {
   padding: 10px 20px;
 }
 
+.nav li {
+  display: inline;
+  margin-right: 10px;
+}
+
 .student-list {
   margin: 20px 0;
 }
@@ -21,6 +26,10 @@ body {
 
 ul {
   list-style: none;
+}
+
+.pagination {
+  margin-bottom: 20px;
 }
 
 .pagination li {

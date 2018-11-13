@@ -1,9 +1,7 @@
 import React from 'react';
 import StudentForm from './StudentForm';
 
-const EditStudent = props => {
-  const student = props.student;
-
+const EditStudent = ({ student, ...props }) => {
   return (
     <StudentForm {...props} text='Edit'>
       {student.firstName} {student.lastName} - {student.index}, {student.module}
