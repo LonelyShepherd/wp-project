@@ -1,8 +1,6 @@
 package mk.finki.ukim.wp.studentsapi.web.rest;
 
-import mk.finki.ukim.wp.studentsapi.models.EditExistingStudent;
-import mk.finki.ukim.wp.studentsapi.models.NewStudent;
-import mk.finki.ukim.wp.studentsapi.models.Student;
+import mk.finki.ukim.wp.studentsapi.models.*;
 import mk.finki.ukim.wp.studentsapi.models.exceptions.InvalidIndexException;
 import mk.finki.ukim.wp.studentsapi.models.exceptions.ParameterMissingException;
 import mk.finki.ukim.wp.studentsapi.models.exceptions.StudentNotFoundException;
@@ -15,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@CrossOrigin({"*", "localhost:3000"})
 @RestController
 @RequestMapping(value = "/students", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudentController {
@@ -43,20 +43,17 @@ public class StudentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addStudent(@RequestBody NewStudent newStudent, HttpServletResponse response) throws InvalidIndexException, ParameterMissingException, StudyProgramNotFoundException {
-        Student st = studentService.add(newStudent.index, newStudent.name, newStudent.lastName, newStudent.studyProgramName);
-
-        // opravi ga ovoj jutre: ne pravi actual redirect ako e toj cilj? i st na grub nacin se vrakja trazi ga u repository bolje
-        response.setHeader("Location", "/" + st.getIndex());
+    public Student addStudent(@RequestBody NewStudent newStudent, HttpServletResponse response) throws InvalidIndexException, ParameterMissingException, StudyProgramNotFoundException {
+        return studentService.add(newStudent.index, newStudent.name, newStudent.lastName, newStudent.studyProgramName);
     }
 
     @RequestMapping(path = "/{index}", method = RequestMethod.PATCH)
-    public void editStudent(@PathVariable String index, @RequestBody EditExistingStudent editExistingStudent) throws StudentNotFoundException, StudyProgramNotFoundException {
-        studentService.update(index, editExistingStudent.name, editExistingStudent.lastName, editExistingStudent.studyProgramName);
+    public Student editStudent(@PathVariable String index, @RequestBody EditExistingStudent editExistingStudent) throws StudentNotFoundException, StudyProgramNotFoundException {
+        return studentService.update(index, editExistingStudent.name, editExistingStudent.lastName, editExistingStudent.studyProgramName);
     }
 
     @RequestMapping(path = "/{index}", method = RequestMethod.DELETE)
-    public void deleteStudent(@PathVariable String index) throws StudentNotFoundException {
-        studentService.delete(index);
+    public Student deleteStudent(@PathVariable String index) throws StudentNotFoundException {
+        return studentService.delete(index);
     }
 }

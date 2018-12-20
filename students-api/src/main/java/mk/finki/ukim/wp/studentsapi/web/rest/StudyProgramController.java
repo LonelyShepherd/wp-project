@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin({"*", "localhost:3000"})
 @RestController
 @RequestMapping(value = "/study_programs", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudyProgramController {
@@ -25,12 +26,12 @@ public class StudyProgramController {
     }
 
     @PostMapping
-    public void addStudyProgram(@RequestBody NewStudyProgram newStudyProgram) {
-        studyProgramService.add(newStudyProgram.name);
+    public StudyProgram addStudyProgram(@RequestBody NewStudyProgram newStudyProgram) {
+        return studyProgramService.add(newStudyProgram.name);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public void deleteStudyProgram(@PathVariable long id) {
-        studyProgramService.delete(id);
+    public StudyProgram deleteStudyProgram(@PathVariable long id) {
+        return studyProgramService.delete(id);
     }
 }

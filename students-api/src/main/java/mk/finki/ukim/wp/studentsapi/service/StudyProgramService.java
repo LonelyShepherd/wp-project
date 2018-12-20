@@ -19,12 +19,14 @@ public class StudyProgramService {
         return repository.findAll();
     }
 
-    public void add(String name) {
-        StudyProgram st = new StudyProgram(name);
-        repository.save(st);
+    public StudyProgram add(String name) {
+        StudyProgram st = new StudyProgram();
+        st.name = name;
+
+        return repository.save(st);
     }
 
-    public void delete(long id) {
-        repository.deleteById(id);
+    public StudyProgram delete(long id) {
+        return repository.deleteById(id);
     }
 }

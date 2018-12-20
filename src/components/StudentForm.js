@@ -1,5 +1,9 @@
 import React, {Component } from 'react';
 import TextInput from './TextInput';
+import Select from './Select';
+import StudyProgramController from '../controllers/StudyProgramController';
+
+const studyProgramController = new StudyProgramController();
 
 class StudenForm extends Component {
   constructor(props) {
@@ -14,10 +18,6 @@ class StudenForm extends Component {
 
     student[name] = e.target.value;
   
-    // in case one of the field values were updated but later updated again, only to be empty string
-    // in that case the corresponding property will be empty string and when merged with appropriate 
-    // student from the list, the property will be set to empty string, which is to be avoided
-    // maybe there is more elegant solution to this! 
     student[name].trim() === '' && delete student[name];
   }
 
@@ -29,12 +29,12 @@ class StudenForm extends Component {
   render = () => {
     return (
       <div>
-        {this.props.children}
         <form onSubmit={this.submitHandler}>
-          <TextInput value='' name='firstName' onChange={this.saveChanges} />
+          {this.props.children}
+          {!this.props.edit && <TextInput value='' name="index" onChange={this.saveChanges} />}
+          <TextInput value='' name='name' onChange={this.saveChanges} />
           <TextInput value='' name='lastName' onChange={this.saveChanges} />
-          <TextInput value='' name='index' onChange={this.saveChanges} />
-          <TextInput value='' name='module' onChange={this.saveChanges} />
+          <Select data={studyProgramController.all} name="studyProgramName" onChange={this.saveChanges} />
           <input type="submit" value={this.props.text} />
         </form>
       </div>

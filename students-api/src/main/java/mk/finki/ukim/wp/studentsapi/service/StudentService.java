@@ -25,23 +25,21 @@ public class StudentService {
     }
 
     public List<Student> list() {
-        return srepository.findAll().stream()
-            .map(student -> new Student(student.getIndex(), student.getName(), student.getLastName()))
-            .collect(Collectors.toList());
+        return srepository.findAll();
     }
 
     public Student single(String index) throws StudentNotFoundException {
-        Optional<Student> s = srepository.findById(index);
+        Student s = srepository.findById(index);
 
-        if (!s.isPresent())
+        if (s == null)
             throw new StudentNotFoundException();
 
-        return s.get();
+        return s;
     }
 
     public List<Student> listByStudyProgram(long id) {
         return srepository.findAll().stream()
-            .filter(student -> student.getStudyProgram().getId() == id)
+            .filter(student -> student.studyProgram.id == id)
             .collect(Collectors.toList());
     }
 
@@ -56,17 +54,19 @@ public class StudentService {
         if (sp == null)
             throw new StudyProgramNotFoundException();
 
-        Student s = new Student(index, name, lastName, sp);
+        Student s = new Student();
+        s.index = index;
+        s.name = name;
+        s.lastName = lastName;
+        s.studyProgram = sp;
 
-        srepository.save(s);
-
-        return s;
+        return srepository.save(s);
     }
 
-    public void update(String index, String name, String lastName, String studyProgramName) throws StudentNotFoundException, StudyProgramNotFoundException {
-        Optional<Student> s = srepository.findById(index);
+    public Student update(String index, String name, String lastName, String studyProgramName) throws StudentNotFoundException, StudyProgramNotFoundException {
+        Student s = srepository.findById(index);
 
-        if (!s.isPresent())
+        if (s == null)
             throw new StudentNotFoundException();
 
         StudyProgram p = null;
@@ -78,19 +78,19 @@ public class StudentService {
                 throw new StudyProgramNotFoundException();
         }
 
-        Student st = s.get();
+        Student st = s;
 
-        st.setName(name != null ? name : st.getName());
-        st.setLastName(lastName != null ? lastName : st.getLastName());
-        st.setStudyProgram(p != null ? p : st.getStudyProgram());
+        st.name = name != null ? name : st.name;
+        st.lastName = lastName != null ? lastName : st.lastName;
+        st.studyProgram = p != null ? p : st.studyProgram;
 
-        srepository.save(st);
+        return srepository.save(st);
     }
 
-    public void delete(String index) throws StudentNotFoundException {
-        if (!srepository.findById(index).isPresent())
+    public Student delete(String index) throws StudentNotFoundException {
+        if (srepository.findById(index) == null)
             throw new StudentNotFoundException();
 
-        srepository.deleteById(index);
+        return srepository.deleteById(index);
     }
 }

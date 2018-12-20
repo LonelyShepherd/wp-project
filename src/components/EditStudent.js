@@ -3,8 +3,8 @@ import StudentForm from './StudentForm';
 
 const EditStudent = ({ student, ...props }) => {
   return (
-    <StudentForm {...props} text='Edit'>
-      {student.firstName} {student.lastName} - {student.index}, {student.module}
+    <StudentForm {...props} edit text='Edit'>
+      {`${student.index} ${student.name} ${student.lastName} - ${student.studyProgram.name}`}
     </StudentForm>
   );
 }

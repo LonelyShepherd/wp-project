@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import StudentItem from './StudentItem';
 import ReactPaginate from 'react-paginate';
 
-class StudentsList extends Component {
+class StudentsList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -13,15 +13,15 @@ class StudentsList extends Component {
   }
 
   pageChangeHandler = data => {
-    this.setState({pageNum: data.selected});
+    this.setState({ pageNum: data.selected });
   }
 
   getPage = (offset, nextPageOffset) => {
     return this.props.students
       .map(student =>
         <StudentItem 
-          id={student.uid} 
-          key={student.uid}
+          id={student.index} 
+          key={student.index}
           student={student} 
           onDelete={this.props.onDelete}
           onItemClick={this.props.onItemClick}

@@ -1,86 +1,24 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { listStudents } from './repository/studentRepository';
-// note for future self: in practice it would be much better if the 
-// separate page components (pages) are imported lazily i.e. only when needed    
-import Add from './pages/Add';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
+import StudyPrograms from './pages/StudyPrograms';
 import './App.css';
 
-// silly way to have a global id but it's a lab project after all
-// in reality you would want to use various libraries that provides
-// global unique id creation
-let id = 5;
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      students: listStudents(),
-      uid: null
-    }
-  }
-
-  updateUid = uid => {
-    this.setState({uid});
-  }
-
-  addStudent = o => {
-    const students = this.state.students;
-    const obj = {
-      uid: ++id, 
-      firstName: '', 
-      lastName: '', 
-      index:'',
-      module: ''
-    };
-
-    this.setState({
-      students: [...students, {...obj, ...o}]
-    });
-  }
-
-  editStudent = o => {
-    const uid = this.state.uid;
-    const students = this.state.students;
-        
-    this.setState({
-      students: students.map(student => student.uid === uid ? {...student, ...o} : student)
-    });
-
-    o = {};
-  }
-
-  deleteStudent = uid => {
-    let students = this.state.students;
-    students.splice(students.indexOf(students.filter(student => student.uid === uid)[0]), 1);
-
-    this.setState({students});
-  }
-  
-  render = () => {
-    const student = this.state.students.filter(student => student.uid === this.state.uid)[0];
-    
+class App extends React.Component {  
+  render() {
     return (
       <Router>
         <>
           <div className="nav">
             <ul>
-              <li><Link to='/'>Home</Link></li>
-              <li><Link to='/add'>Add Student</Link></li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/study-programs">Study Programs</Link></li>
             </ul>
           </div>
-          <Route exact path='/' render={() => 
-            <Home 
-              student={student}
-              students={this.state.students} 
-              onSubmit={this.editStudent}
-              onDelete={this.deleteStudent} 
-              onItemClick={this.updateUid} 
-            />} 
-          />
-          <Route path='/add' render={() => <Add onSubmit={this.addStudent} />} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/study-programs" component={StudyPrograms} />
+          </Switch>
         </>
       </Router>
     );

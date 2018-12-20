@@ -1,27 +1,77 @@
 import React, { Component } from 'react';
-import StudentList from '../components/StudentsList';
 import EditStudent from '../components/EditStudent';
+import AddStudent from '../components/AddStudent';
+import StudentController from '../controllers/StudentController';
+import StudentsList from '../components/StudentsList';
+
+const studentController = new StudentController();
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      show: false
+      show: false,
+      index: null,
+      students: []
     }
   }
 
+  updateIndex = index => {
+    this.setState({ index });
+  }
+
+  addStudent = o => {    
+    studentController.add(o)
+      .then(data => {
+        console.log(data);
+        this.setState({
+          students: [...this.state.students, data]
+        });
+      });
+  }
+
+  editStudent = o => {
+    const { index, students } = this.state;
+    
+    studentController.edit(index, o)
+      .then(data => {
+        this.setState({
+          students: students.map(student => student.index === data.index ? {...student, ...data} : student)
+        });
+      });
+
+    o = {};
+  }
+
+  deleteStudent = index => {
+    studentController.delete(index)
+    .then(response => {
+        let { students } = this.state;
+        students.splice(students.indexOf(students.filter(student => student.index === index)[0]), 1);
+
+        this.setState(state => ({ students }));
+      });
+  }
+
   showDetails = () => {
-    this.setState({show: true});
+    this.setState({ show: true });
   }
 
   hideDetails = () => {
-    this.setState({show: false});
+    this.setState({ show: false });
   }
 
   onItemClick = e => {
-    this.props.onItemClick(parseInt(e.target.id));
-    this.showDetails();
+    this.setState({
+      show: true,
+      index: e.target.id
+    });
+  }
+
+  onDelete = e => {
+    this.deleteStudent(parseInt(e.target.id));
+    this.hideDetails();
   }
 
   onSubmit = student => {
@@ -29,26 +79,33 @@ class Home extends Component {
     this.hideDetails();
   }
 
-  onDelete = uid => {
-    this.props.onDelete(parseInt(uid));
-    this.hideDetails();
+  componentDidMount() {
+    studentController.all()
+      .then(data => {
+        this.setState({
+          students: data
+        });
+      });
   }
 
   render = () => {
-    const element = this.state.show && 
+    const student = this.state.students.filter(student => student.index === this.state.index)[0];
+    
+    const edit = this.state.show && 
       <EditStudent 
-        student={this.props.student} 
-        onSubmit={this.onSubmit}
+        student={student} 
+        onSubmit={this.editStudent}
       />;
 
     return (
       <>
-        <StudentList 
-          students={this.props.students} 
-          onItemClick={this.onItemClick}  
+        <AddStudent onSubmit={this.addStudent} />
+        <StudentsList 
+          students={this.state.students} 
           onDelete={this.onDelete}
+          onItemClick={this.onItemClick}  
         />
-        {element}
+        {edit}
       </>
     );
   }

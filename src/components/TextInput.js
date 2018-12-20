@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-// controlled component - better to be separated then to store separate values for
-// each input in App's state; it's easier to manage
-class TextInput extends Component {
+class TextInput extends React.Component {
   constructor(props) {
     super(props);
 

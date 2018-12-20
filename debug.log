@@ -1,1 +1,8 @@
 [1105/090650.294:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
+[1220/063535.572:ERROR:process_info.cc(359)] UncheckedAllocate
+[1220/063540.427:ERROR:process_info.cc(359)] UncheckedAllocate
+[1220/103532.241:ERROR:process_info.cc(359)] UncheckedAllocate
+[1220/103616.411:ERROR:process_info.cc(359)] UncheckedAllocate
+[1220/124054.779:ERROR:process_info.cc(359)] UncheckedAllocate
+[1220/124054.826:ERROR:process_info.cc(359)] UncheckedAllocate
+[1220/124054.903:ERROR:process_info.cc(359)] UncheckedAllocate
