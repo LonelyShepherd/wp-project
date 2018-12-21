@@ -3,7 +3,7 @@ import StudentForm from './StudentForm';
 
 const AddStudent = props => {
   return (
-    <StudentForm {...props} text='Add'>
+    <StudentForm text="Add" {...props}>
       <h1>Add new student</h1>
     </StudentForm>
   );

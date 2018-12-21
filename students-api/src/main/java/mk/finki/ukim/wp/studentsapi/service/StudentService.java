@@ -8,28 +8,28 @@ import mk.finki.ukim.wp.studentsapi.models.exceptions.StudentNotFoundException;
 import mk.finki.ukim.wp.studentsapi.models.exceptions.StudyProgramNotFoundException;
 import mk.finki.ukim.wp.studentsapi.persistance.StudentRepository;
 import mk.finki.ukim.wp.studentsapi.persistance.StudyProgramRepository;
+import mk.finki.ukim.wp.studentsapi.service.interfaces.IStudentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class StudentService {
-    private final StudentRepository srepository;
-    private final StudyProgramRepository sprepository;
+public class StudentService implements IStudentService {
+    private final StudentRepository studentRepository;
+    private final StudyProgramRepository studyProgramRepository;
 
-    public StudentService(StudentRepository srepository, StudyProgramRepository sprepository) {
-        this.srepository = srepository;
-        this.sprepository = sprepository;
+    public StudentService(StudentRepository studentRepository, StudyProgramRepository studyProgramRepository) {
+        this.studentRepository = studentRepository;
+        this.studyProgramRepository = studyProgramRepository;
     }
 
     public List<Student> list() {
-        return srepository.findAll();
+        return studentRepository.findAll();
     }
 
     public Student single(String index) throws StudentNotFoundException {
-        Student s = srepository.findById(index);
+        Student s = studentRepository.findById(index);
 
         if (s == null)
             throw new StudentNotFoundException();
@@ -38,7 +38,7 @@ public class StudentService {
     }
 
     public List<Student> listByStudyProgram(long id) {
-        return srepository.findAll().stream()
+        return studentRepository.findAll().stream()
             .filter(student -> student.studyProgram.id == id)
             .collect(Collectors.toList());
     }
@@ -49,7 +49,7 @@ public class StudentService {
         if (index.length() != 6)
             throw new InvalidIndexException();
 
-        StudyProgram sp = sprepository.findByName(studyProgramName);
+        StudyProgram sp = studyProgramRepository.findByName(studyProgramName);
 
         if (sp == null)
             throw new StudyProgramNotFoundException();
@@ -60,11 +60,11 @@ public class StudentService {
         s.lastName = lastName;
         s.studyProgram = sp;
 
-        return srepository.save(s);
+        return studentRepository.save(s);
     }
 
     public Student update(String index, String name, String lastName, String studyProgramName) throws StudentNotFoundException, StudyProgramNotFoundException {
-        Student s = srepository.findById(index);
+        Student s = studentRepository.findById(index);
 
         if (s == null)
             throw new StudentNotFoundException();
@@ -72,7 +72,7 @@ public class StudentService {
         StudyProgram p = null;
 
         if (studyProgramName != null) {
-            p = sprepository.findByName(studyProgramName);
+            p = studyProgramRepository.findByName(studyProgramName);
 
             if (p == null)
                 throw new StudyProgramNotFoundException();
@@ -84,13 +84,13 @@ public class StudentService {
         st.lastName = lastName != null ? lastName : st.lastName;
         st.studyProgram = p != null ? p : st.studyProgram;
 
-        return srepository.save(st);
+        return studentRepository.save(st);
     }
 
-    public Student delete(String index) throws StudentNotFoundException {
-        if (srepository.findById(index) == null)
+    public void delete(String index) throws StudentNotFoundException {
+        if (studentRepository.findById(index) == null)
             throw new StudentNotFoundException();
 
-        return srepository.deleteById(index);
+        studentRepository.deleteById(index);
     }
 }

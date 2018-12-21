@@ -1,24 +1,25 @@
-import React, {Component } from 'react';
-import TextInput from './TextInput';
+import React from 'react';
 import Select from './Select';
+import TextInput from './TextInput';
 import StudyProgramController from '../controllers/StudyProgramController';
 
 const studyProgramController = new StudyProgramController();
 
-class StudenForm extends Component {
+export default class StudenForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.student = {};
   }
 
-  saveChanges = e => {
+  registerChanges = e => {
     const name = e.target.name;
     const student = this.student;
 
     student[name] = e.target.value;
   
-    student[name].trim() === '' && delete student[name];
+    if (student[name].trim() === '') 
+      delete student[name];
   }
 
   submitHandler = e => {
@@ -26,20 +27,50 @@ class StudenForm extends Component {
     this.props.onSubmit(this.student);
   }
 
-  render = () => {
+  render() {
+    const {
+      edit, 
+      text,
+      error,
+    } = this.props;
+
+    const indexField = !edit &&
+      <div>
+        <label>Index</label>
+        <TextInput name="index" onChange={this.registerChanges} />
+      </div>;
+
     return (
       <div>
         <form onSubmit={this.submitHandler}>
           {this.props.children}
-          {!this.props.edit && <TextInput value='' name="index" onChange={this.saveChanges} />}
-          <TextInput value='' name='name' onChange={this.saveChanges} />
-          <TextInput value='' name='lastName' onChange={this.saveChanges} />
-          <Select data={studyProgramController.all} name="studyProgramName" onChange={this.saveChanges} />
-          <input type="submit" value={this.props.text} />
+          <div className="fields">
+            {indexField}
+            <div>
+              <label>First name</label>
+              <TextInput name="name" onChange={this.registerChanges} />
+            </div>
+            <div>
+              <label>Last name</label>
+              <TextInput name="lastName" onChange={this.registerChanges} />
+            </div>
+            <div>
+              <label>Study program</label>
+              <Select 
+                name="studyProgramName" 
+                data={studyProgramController.all} 
+                onChange={this.registerChanges} 
+              />
+            </div>
+            <div>
+              <input type="submit" value={text} />
+            </div>
+          </div>
+          <div className="error">
+            {error && <div>{error}</div>}
+          </div>
         </form>
       </div>
     );
   }
 }
-
-export default StudenForm;

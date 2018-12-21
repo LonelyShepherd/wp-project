@@ -12,7 +12,8 @@ class StudyPrograms extends React.Component {
       name: '',
       programs: [],
       students: [],
-      showStudents: false
+      showStudents: false,
+      deletingError: null
     };
   }
 
@@ -38,15 +39,26 @@ class StudyPrograms extends React.Component {
     });
   }
 
-  removeHandler = e => {
+  deleteHandler = e => {
     const id = e.target.id;
 
     studyProgramController.delete(id)
       .then(response => {
-        let { programs } = this.state;
-        programs.splice(programs.indexOf(programs.filter(program => program.id === id)[0]), 1);
+        if (response.status >= 400) {
+          response.json()
+            .then(data => this.setState(state => ({ deletingError: data.message })));
+        } else {
+          this.setState(state => {
+            const programs = state.programs;
+            programs.splice(programs.indexOf(programs.filter(program => program.id === id)[0]), 1)
 
-        this.setState(state => ({ programs }));
+            return {
+              programs: programs, 
+              showStudents: false,
+              deletingError: null
+            }
+          });
+        }
       });
   }
 
@@ -72,7 +84,14 @@ class StudyPrograms extends React.Component {
   }
 
   render() {
-    const programs = this.state.programs.map(program => (
+    const {
+      programs,
+      students,
+      showStudents,
+      deletingError
+    } = this.state;
+
+    const programsList = programs.map(program => (
       <li 
         id={program.id}
         key={program.id}
@@ -86,34 +105,45 @@ class StudyPrograms extends React.Component {
         <button 
           id={program.id} 
           type="button" 
-          onClick={this.removeHandler}
+          onClick={this.deleteHandler}
         >Delete</button>
       </li>
     ));
 
-    const students = this.state.showStudents &&
-      <ul>
-        {this.state.students.map(student => 
-          <li key={student.index}>
-            {`${student.index} ${student.name} ${student.lastName}`}
-          </li>
-        )}
-      </ul>
+    const studentsList = showStudents &&
+      <div>
+        <h1>Students ({students.length})</h1>
+        <ul>
+          {students.map(student => 
+            <li key={student.index}>
+              {`${student.index} ${student.name} ${student.lastName}`}
+            </li>
+          )}
+        </ul>
+      </div>;
 
     return (
       <div>
         <form onSubmit={this.submitHandler}>
           <h1>Add new study program</h1>
-          <label>Program name</label>
-          <TextInput name="name" onChange={this.changeHandler} />
-          <input type="submit" value="Add" />
+          <div className="fields">
+            <div>
+              <label>Program name</label>
+              <TextInput name="name" onChange={this.changeHandler} />
+            </div>
+            <div>
+              <input type="submit" value="Add" />
+            </div>
+          </div>
         </form>
         <div>
+          <h1>Study programs</h1>
           <ul>
-            {programs}
+            {programsList}
           </ul>
+          {deletingError && <div className="error">{deletingError}</div>}
         </div>
-        {students}
+        {studentsList}
       </div>
     );
   }

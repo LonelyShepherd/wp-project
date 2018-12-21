@@ -1,20 +1,20 @@
 import React from 'react';
 
-class TextInput extends React.Component {
+export default class TextInput extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      value: ''
-    }
+      value: props.value || ''
+    };
   }
 
   changeHandler = e => {
-    this.setState({value: e.target.value});
+    this.setState({ value: e.target.value });
     this.props.onChange(e);
   }
 
-  render = () => {
+  render() {
     return (
       <input 
         type='text'
@@ -25,5 +25,3 @@ class TextInput extends React.Component {
     );
   }
 }
-
-export default TextInput;

@@ -5,7 +5,7 @@ import mk.finki.ukim.wp.studentsapi.models.exceptions.InvalidIndexException;
 import mk.finki.ukim.wp.studentsapi.models.exceptions.ParameterMissingException;
 import mk.finki.ukim.wp.studentsapi.models.exceptions.StudentNotFoundException;
 import mk.finki.ukim.wp.studentsapi.models.exceptions.StudyProgramNotFoundException;
-import mk.finki.ukim.wp.studentsapi.service.StudentService;
+import mk.finki.ukim.wp.studentsapi.service.interfaces.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,16 +13,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin({"*", "localhost:3000"})
 @RestController
 @RequestMapping(value = "/students", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudentController {
-    private final StudentService studentService;
+    private final IStudentService studentService;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(IStudentService studentService) {
         this.studentService = studentService;
     }
 
@@ -53,7 +52,7 @@ public class StudentController {
     }
 
     @RequestMapping(path = "/{index}", method = RequestMethod.DELETE)
-    public Student deleteStudent(@PathVariable String index) throws StudentNotFoundException {
-        return studentService.delete(index);
+    public void deleteStudent(@PathVariable String index) throws StudentNotFoundException {
+        studentService.delete(index);
     }
 }

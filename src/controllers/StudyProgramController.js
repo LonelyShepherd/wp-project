@@ -10,9 +10,7 @@ class StudyProgramController {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ 
-        name 
-      })
+      body: JSON.stringify({ name })
     })
       .then(response => response.json());
   }

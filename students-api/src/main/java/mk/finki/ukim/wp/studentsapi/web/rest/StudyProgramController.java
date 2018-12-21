@@ -2,7 +2,8 @@ package mk.finki.ukim.wp.studentsapi.web.rest;
 
 import mk.finki.ukim.wp.studentsapi.models.NewStudyProgram;
 import mk.finki.ukim.wp.studentsapi.models.StudyProgram;
-import mk.finki.ukim.wp.studentsapi.service.StudyProgramService;
+import mk.finki.ukim.wp.studentsapi.models.exceptions.StudyProgramNotEmptyException;
+import mk.finki.ukim.wp.studentsapi.service.interfaces.IStudyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/study_programs", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudyProgramController {
-    private final StudyProgramService studyProgramService;
+    private final IStudyProgramService studyProgramService;
 
     @Autowired
-    StudyProgramController(StudyProgramService studyProgramService) {
+    StudyProgramController(IStudyProgramService studyProgramService) {
         this.studyProgramService = studyProgramService;
     }
 
@@ -31,7 +32,7 @@ public class StudyProgramController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public StudyProgram deleteStudyProgram(@PathVariable long id) {
-        return studyProgramService.delete(id);
+    public void deleteStudyProgram(@PathVariable long id) throws StudyProgramNotEmptyException {
+        studyProgramService.delete(id);
     }
 }

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Home from './pages/Home';
-import StudyPrograms from './pages/StudyPrograms';
 import './App.css';
+
+const Students = lazy(() => import('./routes/Students'));
+const StudyPrograms = lazy(() => import('./routes/StudyPrograms'));
 
 class App extends React.Component {  
   render() {
@@ -11,14 +12,16 @@ class App extends React.Component {
         <>
           <div className="nav">
             <ul>
-              <li><Link to="/">Home</Link></li>
+              <li><Link to="/">Students</Link></li>
               <li><Link to="/study-programs">Study Programs</Link></li>
             </ul>
           </div>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/study-programs" component={StudyPrograms} />
-          </Switch>
+          <React.Suspense fallback="Loading...">
+            <Switch>
+              <Route exact path="/" component={Students} />
+              <Route path="/study-programs" component={StudyPrograms} />
+            </Switch>
+          </React.Suspense>
         </>
       </Router>
     );

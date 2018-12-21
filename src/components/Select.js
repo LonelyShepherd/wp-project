@@ -1,11 +1,11 @@
 import React from 'react';
 
-class Select extends React.Component {
+export default class Select extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      value: this.props.value || 'select',
+      value: props.value || 'select',
       data: []
     };
   }
@@ -29,12 +29,9 @@ class Select extends React.Component {
         value={this.state.value} 
         onChange={this.changeHandler}
       >
-        <option value="select">Select...</option>
+        <option>Select...</option>
         {this.state.data.map(item => 
-          <option 
-            key={item.id} 
-            value={item.name}
-          >
+          <option key={item.id} value={item.name}>
             {item.name}
           </option>
         )}
@@ -42,5 +39,3 @@ class Select extends React.Component {
     );
   }
 }
-
-export default Select;

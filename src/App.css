@@ -1,15 +1,31 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 body {
   padding: 10px 20px;
 }
 
+#root {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.nav {
+  margin-bottom: 30px;
+}
+
 .nav li {
   display: inline;
-  margin-right: 10px;
+  margin-right: 30px;
+}
+
+.nav li a {
+  color: #0f6294;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .student-list {
@@ -43,4 +59,41 @@ ul {
 
 .pagination .active {
   font-weight: bold;
+}
+
+form h1 {
+  margin-bottom: 20px;
+}
+
+form .fields {
+  display: flex;
+}
+
+form .fields > div {
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+label {
+  display: table;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 200px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  padding: 5px 10px;
+  border: 1px solid #aaa;
+}
+
+li button {
+  margin-left: 10px;
+}
+
+.error {
+  color: red;
+  font-weight: 600; 
 }
